@@ -5,14 +5,13 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Book List</div>
+                <div class="card-header">Account List</div>
                 <div class="card-body">
-                    @foreach ($books as $book)
-                        <a href="{{route('book.edit',[$book])}}">{{$book->title}} {{$book->bookAuthor->name}} {{$book->bookAuthor->surname}}</a>
-                        <form method="POST" action="{{route('book.destroy', [$book])}}">
+                    @foreach ($accounts as $account)
+                        <a href="{{route('account.edit',[$account])}}">{{$account->account}}</a>
+                        <form method="POST" action="{{route('account.destroy', [$account])}}">
                             @csrf
                             <button type="submit">DELETE</button>
-                            <small class="text-muted">{{$book->about}}</small>
                         </form>
                         <br>
                     @endforeach
