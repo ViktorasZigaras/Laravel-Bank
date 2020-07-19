@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Account;
 use Illuminate\Http\Request;
 use Validator;
+use Ramsey\Uuid\Uuid;
 
 class AccountController extends Controller
 {
@@ -14,10 +15,35 @@ class AccountController extends Controller
         return view('account.index', ['accounts' => Account::all()->sortBy('surname')]);
     }
 
+    private $numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+    private function generatePersonID() {
+        $person_id = '';
+        for ($i = 0; $i < 11; $i++) { 
+            $person_id .= $this->numbers[rand(0, count($this->numbers) - 1)];
+        }
+        return $person_id;
+    }
+
+    private function generateAccountID() {
+        $account_id = 'LT';
+        for ($i = 0; $i < 20; $i++) { 
+            $account_id .= $this->numbers[rand(0, count($this->numbers) - 1)];
+        }
+        return $account_id;
+    }
+
     public function create()
     {
         #
-        return view('account.create');
+        return view('account.create', [
+            'newUuid' => (string) Uuid::uuid4(),
+            'newName' => 'name ' . rand(1, 50),
+            'newSurname' => 'surname ' . rand(1, 50),
+            'newAccount' => $this->generateAccountID(),
+            'newPersonID' => $this->generatePersonID(),
+            'newValue' => 0
+        ]);
     }
 
     public function store(Request $request)
