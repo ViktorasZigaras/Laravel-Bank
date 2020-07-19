@@ -20,11 +20,9 @@
                 <div class="card-body">
                     @foreach ($accounts as $account)
                         <span>
-                            {{$account->account}} ( {{$account->personal_code}} ) {{$account->name}} {{$account->surname}}: {{$account->value}} &euro;
-                            <!-- $account['value'] * App::USDrate()) . ' &dollar;' -->
+                            {{$account->account}} ( {{$account->personal_code}} ) {{$account->name}} {{$account->surname}}: {{$account->value}} &euro; {{$account->value * $rate}} &dollar;
                         </span>
 
-                        <!-- <a href="{{route('account.edit',[$account])}}">{{$account->account}}</a> -->
                         <form method="GET" action="{{route('account.edit', [$account])}}">
                             @csrf
                             <button type="submit">EDIT</button>
@@ -32,6 +30,12 @@
                         <form method="POST" action="{{route('account.destroy', [$account])}}">
                             @csrf
                             <button type="submit">DELETE</button>
+                        </form>
+
+                        <form method="POST" action="{{route('account.add', [$account])}}">
+                            <button type="submit" name="add" value="add">ADD</button>
+                            @csrf
+                            <input type="text" name="value" value="0" class="list-input">
                         </form>
                         <br>
                     @endforeach

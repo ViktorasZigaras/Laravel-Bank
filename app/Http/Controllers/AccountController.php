@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Account;
+use App\Currency;
 use Illuminate\Http\Request;
 use Validator;
 use Ramsey\Uuid\Uuid;
@@ -11,8 +12,38 @@ class AccountController extends Controller
 {
     public function index()
     {
+        # it is possible that there will be no entries, but that's for later
+        $currency = Currency::all()->first();
+        $time = time();
+        if ($time - strtotime($currency->updated_at) > 3600) {
+            $call = curl_init(); 
+            curl_setopt($call, CURLOPT_URL, 'https://api.exchangeratesapi.io/latest?symbols=USD');
+            curl_setopt($call, CURLOPT_RETURNTRANSFER, 1); 
+            $output = json_decode(curl_exec($call)); 
+            curl_close($call);
+            $currency->rate = $output->rates->USD;
+            $currency->updated_at = date($time);
+            $currency->save();
+        }
         #
-        return view('account.index', ['accounts' => Account::all()->sortBy('surname')]);
+        return view('account.index', ['accounts' => Account::all()->sortBy('surname'), 'rate' => $currency->rate]);
+    }
+
+    public function add(Request $request, Account $account)
+    {
+        #
+        $validator = Validator::make($request->all(),
+        [
+            'value' => ['required'],
+        ]
+        );
+        if ($validator->fails()) {
+            $request->flash();
+            return redirect()->back()->withErrors($validator);
+        }
+        $account->value += $request->value;
+        $account->save();
+        return redirect()->route('account.index')->with('success_message', '<Amount ' . $request->value . ' Added>');
     }
 
     private $numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];

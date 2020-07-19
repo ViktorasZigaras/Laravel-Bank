@@ -27,4 +27,6 @@ Route::group(['prefix' => 'accounts'], function() {
     Route::post('update/{account}', 'AccountController@update')->name('account.update');
     Route::post('delete/{account}', 'AccountController@destroy')->name('account.destroy');
     Route::get('show/{account}', 'AccountController@show')->name('account.show');
+
+    Route::post('add/{account}', 'AccountController@add')->name('account.add');
 });
