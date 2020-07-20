@@ -7,6 +7,8 @@ use App\Currency;
 use Illuminate\Http\Request;
 use Validator;
 use Ramsey\Uuid\Uuid;
+use Auth;
+use App\User;
 
 class AccountController extends Controller
 {
@@ -26,7 +28,7 @@ class AccountController extends Controller
             $currency->save();
         }
         #
-        return view('account.index', ['accounts' => Account::all()->sortBy('surname'), 'rate' => $currency->rate]);
+        return view('account.index', ['accounts' => Account::all()->sortBy('surname'), 'rate' => $currency->rate, 'role' => User::find(Auth::id())->role ?? 'none']);
     }
 
     public function add(Request $request, Account $account)
@@ -41,9 +43,29 @@ class AccountController extends Controller
             $request->flash();
             return redirect()->back()->withErrors($validator);
         }
+        if ($request->value < 0) return redirect()->back()->withErrors('Negative value can\'t be provided.');
         $account->value += $request->value;
         $account->save();
-        return redirect()->route('account.index')->with('success_message', '<Amount ' . $request->value . ' Added>');
+        return redirect()->route('account.index')->with('success_message', 'Amount ' . $request->value . ' added.');
+    }
+
+    public function remove(Request $request, Account $account)
+    {
+        #
+        $validator = Validator::make($request->all(),
+        [
+            'value' => ['required'],
+        ]
+        );
+        if ($validator->fails()) {
+            $request->flash();
+            return redirect()->back()->withErrors($validator);
+        }
+        if ($request->value < 0) return redirect()->back()->withErrors('Negative value can\'t be provided.');
+        if ($request->value > $account->value) return redirect()->back()->withErrors('Can\'t remove more than account has.');
+        $account->value -= $request->value;
+        $account->save();
+        return redirect()->route('account.index')->with('success_message', 'Amount ' . $request->value . ' removed.');
     }
 
     private $numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
@@ -97,7 +119,7 @@ class AccountController extends Controller
         // $account = Account::create($request->all());
         // $account->save();
         Account::create($request->all())->save();
-        return redirect()->route('account.index')->with('success_message', '<Account Created>');
+        return redirect()->route('account.index')->with('success_message', 'Account created.');
     }
 
     public function show(Account $account)
@@ -118,12 +140,12 @@ class AccountController extends Controller
         #
         $validator = Validator::make($request->all(),
         [
-            'uuid' => ['required', 'min:36', 'max:36'],
+            // 'uuid' => ['required', 'min:36', 'max:36'],
             'account' => ['required', 'min:22', 'max:22'],
             'personal_code' => ['required', 'min:11', 'max:11'],
             'name' => ['required', 'min:8', 'max:32'],
             'surname' => ['required', 'min:8', 'max:32'],
-            'value' => ['required'],
+            // 'value' => ['required'],
         ]
         );
         if ($validator->fails()) {
@@ -133,13 +155,17 @@ class AccountController extends Controller
         // $account->fill($request->all());
         // $account->save();
         $account->fill($request->all())->save();
-        return redirect()->route('account.index')->with('success_message', '<Account Updated>');
+        return redirect()->route('account.index')->with('success_message', 'Account updated.');
     }
 
     public function destroy(Account $account)
     {
         #
-        $account->delete();
-        return redirect()->route('account.index')->with('success_message', '<Account Deleted>');
+        if ($account->value !== 0) {
+            return redirect()->back()->withErrors('Account has to be empty.');
+        } else {
+            $account->delete();
+            return redirect()->route('account.index')->with('success_message', 'Account deleted.');
+        }
     }
 }

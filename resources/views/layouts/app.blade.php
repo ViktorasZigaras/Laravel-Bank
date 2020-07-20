@@ -114,7 +114,31 @@
                 </div>
             </div>
 
-            @yield('content')
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-10">
+                        <div class="card min-width-1000">
+
+                            <div class="header">
+                                <div><img class="image" src="{{ asset('pictures/bank.jpg') }}" alt="bank"></div>
+                                <div class="header-text">
+                                    <h2>Čiupčius and Griebčius Inc.</h2>
+                                    <div>Give Us All Of Your Money NOW!!!</div>
+                                </div>
+                                <div><img class="image" src="{{ asset('pictures/money.jpg') }}" alt="money"></div>
+                            </div>
+
+                            @yield('content')
+
+                            <div class="footer">
+                                <div>Grab-All Brothers: We Love Your Money And NOT You!!!</div>
+                                <div>&copy; 2020 Corona Edition</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </main>
     </div>

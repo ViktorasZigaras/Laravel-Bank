@@ -1,53 +1,46 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-10 col-lg-10 col-md-10 col-sm-10">
-            <div class="card">
 
-                <div class="header">
-                    <div><img class="image" src="pictures/bank.jpg" alt="bank"></div>
-                    <div class="header-text">
-                        <h2>Čiupčius and Griebčius Inc.</h2>
-                        <div>Give Us All Of Your Money NOW!!!</div>
-                    </div>
-                    <div><img class="image" src="pictures/money.jpg" alt="money"></div>
+    <div class="card-header">Account List</div>
+
+    <div class="card-body">
+        @foreach ($accounts as $account)
+            <span>
+                {{$account->account}} ( {{$account->personal_code}} ) {{$account->name}} {{$account->surname}}: {{$account->value}} &euro; {{$account->value * $rate}} &dollar;
+            </span>
+
+            @if ($role === 'admin')
+
+                <div class="flex">
+
+                    <form method="GET" action="{{route('account.edit', [$account])}}">
+                        @csrf
+                        <button type="submit">EDIT</button>
+                    </form>
+
+                    <form method="POST" action="{{route('account.add', [$account])}}">
+                        <button type="submit" name="add" value="add">ADD</button>
+                        @csrf
+                        <input type="text" name="value" value="0" class="list-input">
+                    </form>
+
+                    <form method="POST" action="{{route('account.remove', [$account])}}">
+                        <button type="submit" name="add" value="add">REMOVE</button>
+                        @csrf
+                        <input type="text" name="value" value="0" class="list-input">
+                    </form>
+
+                    <form method="POST" action="{{route('account.destroy', [$account])}}">
+                        @csrf
+                        <button type="submit">DELETE</button>
+                    </form>
+
                 </div>
 
-                <div class="card-header">Account List</div>
+            @endif
 
-                <div class="card-body">
-                    @foreach ($accounts as $account)
-                        <span>
-                            {{$account->account}} ( {{$account->personal_code}} ) {{$account->name}} {{$account->surname}}: {{$account->value}} &euro; {{$account->value * $rate}} &dollar;
-                        </span>
-
-                        <form method="GET" action="{{route('account.edit', [$account])}}">
-                            @csrf
-                            <button type="submit">EDIT</button>
-                        </form>
-                        <form method="POST" action="{{route('account.destroy', [$account])}}">
-                            @csrf
-                            <button type="submit">DELETE</button>
-                        </form>
-
-                        <form method="POST" action="{{route('account.add', [$account])}}">
-                            <button type="submit" name="add" value="add">ADD</button>
-                            @csrf
-                            <input type="text" name="value" value="0" class="list-input">
-                        </form>
-                        <br>
-                    @endforeach
-                </div>
-
-                <div class="footer">
-                    <div>Grab-All Brothers: We Love Your Money And NOT You!!!</div>
-                    <div>&copy; 2020 Corona Edition</div>
-                </div>
-
-            </div>
-        </div>
+        @endforeach
     </div>
-</div>
+                
 @endsection

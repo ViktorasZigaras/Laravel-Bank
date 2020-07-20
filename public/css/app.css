@@ -10933,11 +10933,6 @@ a.text-dark:focus {
   font-size: 12px;
 }
 
-.span {
-  margin-left: 50px;
-  font-size: 24px;
-}
-
 :root {
   --mainBgColor: #aed48c;
   --mainContainerBgColor: #ffffff;
@@ -10945,8 +10940,6 @@ a.text-dark:focus {
   --primaryContentColor: #cfcb9f;
   --secondaryContentColor: #f7f1c8;
   --mainTextColor: #ffffff;
-  --successColor: #21bfbd;
-  --failColor: #b50b30;
   --secondarySolidColor: #6b9acf;
 }
 
@@ -11014,48 +11007,6 @@ body {
   text-align: center;
 }
 
-.success {
-  background-color: var(--successColor);
-}
-
-.failure {
-  background-color: var(--failColor);
-}
-
-.menu {
-  width: 100%;
-  height: 50px;
-  display: inline-block;
-  line-height: 46px;
-  font-size: 20px;
-  background-color: var(--primarySolidColor);
-}
-
-.menu-item {
-  /* width: 150px; */
-  padding: 0 15px;
-  display: inline-block;
-  text-align: center;
-  border: var(--secondarySolidColor) solid 2px;
-  text-decoration: none;
-  color: var(--mainTextColor);
-  font-weight: bold;
-}
-
-.menu-item:hover {
-  background-color: var(--secondarySolidColor);
-}
-
-.content-container {
-  border: var(--primarySolidColor) solid 1px;
-  border-radius: 20px;
-  background-color: var(--primaryContentColor);
-  display: inline-block;
-  width: 80%;
-  padding: 25px;
-  margin: 25px 7%;
-}
-
 .container span {
   color: var(--primarySolidColor);
   font-size: 18px;
@@ -11107,5 +11058,13 @@ input {
 
 input:hover {
   background-color: var(--secondaryContentColor);
+}
+
+.flex {
+  display: flex;
+}
+
+.min-width-1000 {
+  min-width: 1000px;
 }
 

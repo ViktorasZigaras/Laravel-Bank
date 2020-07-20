@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {return view('welcome');});
 
-Auth::routes();
+Auth::routes(['register' => false]);
+// Auth::routes(['register' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -29,4 +30,5 @@ Route::group(['prefix' => 'accounts'], function() {
     Route::get('show/{account}', 'AccountController@show')->name('account.show');
 
     Route::post('add/{account}', 'AccountController@add')->name('account.add');
+    Route::post('remove/{account}', 'AccountController@remove')->name('account.remove');
 });
