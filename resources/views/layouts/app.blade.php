@@ -128,7 +128,11 @@
                                 <div><img class="image" src="{{ asset('pictures/money.jpg') }}" alt="money"></div>
                             </div>
 
-                            @yield('content')
+                            <div id="content">
+
+                                @yield('content')
+
+                            </div>
 
                             <div class="footer">
                                 <div>Grab-All Brothers: We Love Your Money And NOT You!!!</div>

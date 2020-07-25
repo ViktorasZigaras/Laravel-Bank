@@ -10928,11 +10928,6 @@ a.text-dark:focus {
   }
 }
 
-.test {
-  color: red;
-  font-size: 12px;
-}
-
 :root {
   --mainBgColor: #aed48c;
   --mainContainerBgColor: #ffffff;

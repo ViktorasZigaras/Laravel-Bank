@@ -131,4 +131,33 @@ class AccountController extends Controller
             return redirect()->back()->with('success_message', 'Account deleted.');
         }
     }
+
+    ###
+
+    public function indexJS()
+    {
+        return view('layouts.appJS');
+    }
+
+    public function indexJSdata()
+    {
+        # it is possible that there will be no entries, but that's for later
+        $currency = Currency::all()->first();
+        $time = time();
+        if ($time - strtotime($currency->updated_at) > 3600) {
+            $call = curl_init(); 
+            curl_setopt($call, CURLOPT_URL, 'https://api.exchangeratesapi.io/latest?symbols=USD');
+            curl_setopt($call, CURLOPT_RETURNTRANSFER, 1); 
+            $output = json_decode(curl_exec($call)); 
+            curl_close($call);
+            $currency->rate = $output->rates->USD;
+            $currency->updated_at = date($time);
+            $currency->save();
+        }
+        $accounts = Account::all()->sortBy('surname');
+        $rate = $currency->rate;
+        $role = User::find(Auth::id())->role ?? 'none';
+        #
+        return json_encode(compact('accounts', 'rate', 'role'));
+    }
 }
