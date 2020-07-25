@@ -33,7 +33,8 @@
 
             @csrf
             <button type="submit">EDIT</button>
-            </form>
+            
+        </form>
     </div>
 
 @endsection
