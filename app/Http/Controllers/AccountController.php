@@ -79,17 +79,21 @@ class AccountController extends Controller
         return $number;
     }
 
-    public function create()
-    {
-        #
-        return view('account.create', [
+    private function generateNewAccount() {
+        return [
             'newUuid'     => (string) Uuid::uuid4(),
             'newName'     => (string) 'name ' . rand(1, 50),
             'newSurname'  => (string) 'surname ' . rand(1, 50),
-            'newAccount'  => (int)    $this->generateNumber(11),
-            'newPersonID' => (int)    'LT' . $this->generateNumber(20),
+            'newAccount'  => (string)    'LT' . $this->generateNumber(20),
+            'newPersonID' => (int) $this->generateNumber(11),
             'newValue'    => (int)    0,
-        ]);
+        ];
+    }
+
+    public function create()
+    {
+        #
+        return view('account.create', $this->generateNewAccount());
     }
 
     public function store(StoreRequest $request)
@@ -135,6 +139,7 @@ class AccountController extends Controller
     public function indexJS()
     {
         return view('layouts.appJS');
+        // return view('layouts.appJS', $this->indexData());
     }
 
     public function editJS(Account $account)
@@ -187,5 +192,18 @@ class AccountController extends Controller
         $account->value -= $request->value;
         $account->save();
         return 'Amount ' . $request->value . ' removed.';
+    }
+
+    public function createJS()
+    {
+        #
+        return $this->generateNewAccount();
+    }
+
+    public function storeJS(StoreRequest $request)
+    {
+        #
+        Account::create($request->all());
+        return 'Account created.';
     }
 }

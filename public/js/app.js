@@ -37454,55 +37454,34 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index */ "./resources/js/components/index.js");
 
 var drawCreateInit = function drawCreateInit() {
-  axios.get('http://localhost/Laravel-Bank/public/accountsJS/edit/' + id).then(function (response) {
+  axios.post('http://localhost/Laravel-Bank/public/accountsJS/create', {}).then(function (response) {
     console.log('getting edit info');
     console.log(response.data);
     var data = response.data;
     var contentJSONDOM = document.querySelector('#contentJSON');
 
     if (contentJSONDOM) {
-      contentJSONDOM.innerHTML = "\n                <div class=\"card-header\">Edit Account</div>\n\n                <div class=\"card-body\"> \n\n                    <div class=\"form-group\">\n                        <label> Account </label>\n                        <input type=\"text\" name=\"account\" value=\"".concat(data.account, "\" class=\"form-control\" readonly>\n                        <small class=\"form-text text-muted\">Account Name</small>\n                    </div>\n\n                    <div class=\"form-group\">\n                        <label>Personal Code</label>\n                        <input type=\"text\" name=\"personal_code\" value=\"").concat(data.personal_code, "\" class=\"form-control\" readonly>\n                        <small class=\"form-text text-muted\">Person's ID</small>\n                    </div>\n\n                    <div class=\"form-group\">\n                        <label>Name</label>\n                        <input type=\"text\" id=\"editName\" name=\"name\" value=\"").concat(data.name, "\" class=\"form-control\">\n                        <small class=\"form-text text-muted\">Person's Name</small>\n                    </div>\n\n                    <div class=\"form-group\">\n                        <label>Surname</label>\n                        <input type=\"text\" id=\"editSurname\" name=\"surname\" value=\"").concat(data.surname, "\" class=\"form-control\">\n                        <small class=\"form-text text-muted\">Person's Surname</small>\n                    </div>\n\n                    <button id=\"editButton\" type=\"submit\" onclick=\"\">EDIT</button>\n\n                </div>\n            "); // <input type="hidden" name="uuid" value="{{$newUuid}}">
-      // <div class="form-group">
-      //     <label>Account</label>
-      //     <input type="text" name="account" value="{{old('account', $newAccount)}}" class="form-control">
-      //     <small class="form-text text-muted">Account Name</small>
-      // </div>
-      // <div class="form-group">
-      //     <label>Personal Code</label>
-      //     <input type="text" name="personal_code" value="{{old('personal_code', $newPersonID)}}" class="form-control">
-      //     <small class="form-text text-muted">Person's ID</small>
-      // </div>
-      // <div class="form-group">
-      //     <label>Name</label>
-      //     <input type="text" name="name" value="{{old('name', $newName)}}" class="form-control">
-      //     <small class="form-text text-muted">Person's Name</small>
-      // </div>
-      // <div class="form-group">
-      //     <label>Surname</label>
-      //     <input type="text" name="surname" value="{{old('surname', $newSurname)}}" class="form-control">
-      //     <small class="form-text text-muted">Person's Surname</small>
-      // </div>
-      // <input type="hidden" name="value" value="{{$newValue}}">
-      // @csrf
-      // <button type="submit">ADD</button>
+      contentJSONDOM.innerHTML = "\n                <div class=\"card-header\">Edit Account</div>\n\n                <div class=\"card-body\"> \n\n                    <div class=\"form-group\">\n                        <label> Account </label>\n                        <input type=\"text\" id=\"createAccount\" name=\"account\" value=\"".concat(data.newAccount, "\" class=\"form-control\">\n                        <small class=\"form-text text-muted\">Account Name</small>\n                    </div>\n\n                    <div class=\"form-group\">\n                        <label>Personal Code</label>\n                        <input type=\"text\" id=\"createPersonID\" name=\"personal_code\" value=\"").concat(data.newPersonID, "\" class=\"form-control\">\n                        <small class=\"form-text text-muted\">Person's ID</small>\n                    </div>\n\n                    <div class=\"form-group\">\n                        <label>Name</label>\n                        <input type=\"text\" id=\"createName\" name=\"name\" value=\"").concat(data.newName, "\" class=\"form-control\">\n                        <small class=\"form-text text-muted\">Person's Name</small>\n                    </div>\n\n                    <div class=\"form-group\">\n                        <label>Surname</label>\n                        <input type=\"text\" id=\"createSurname\" name=\"surname\" value=\"").concat(data.newSurname, "\" class=\"form-control\">\n                        <small class=\"form-text text-muted\">Person's Surname</small>\n                    </div>\n\n                    <button id=\"createButton\" type=\"submit\" onclick=\"\"> ADD </button>\n\n                </div>\n            "); //  
 
-      var editButton = document.querySelector('#editButton');
+      var createButton = document.querySelector('#createButton');
 
-      if (editButton) {
-        editButton.addEventListener("click", function () {
-          console.log('update');
-          console.log(document.querySelector('#editName').value);
-          console.log(document.querySelector('#editSurname').value);
-          axios.post('http://localhost/Laravel-Bank/public/accountsJS/update/' + data.id, {
-            name: document.querySelector('#editName').value,
-            surname: document.querySelector('#editSurname').value
+      if (createButton) {
+        createButton.addEventListener("click", function () {
+          console.log('create'); // console.log(data.newUuid, data.newValue);
+
+          axios.post('http://localhost/Laravel-Bank/public/accountsJS/store', {
+            uuid: data.newUuid,
+            account: document.querySelector('#createAccount').value,
+            personal_code: document.querySelector('#createPersonID').value,
+            name: document.querySelector('#createName').value,
+            surname: document.querySelector('#createSurname').value,
+            value: data.newValue
           }).then(function (response) {
             console.log(response);
             Object(_index__WEBPACK_IMPORTED_MODULE_0__["drawIndexInit"])();
           })["catch"](function (error) {
-            console.log(error);
-            console.log(error.response);
-            console.log(error.response.data);
+            console.log(error); // console.log(error.response);
+            // console.log(error.response.data);
           });
         });
       }
@@ -37527,14 +37506,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index */ "./resources/js/components/index.js");
 
 var drawEditInit = function drawEditInit(id) {
-  axios.get('http://localhost/Laravel-Bank/public/accountsJS/edit/' + id).then(function (response) {
+  axios.post('http://localhost/Laravel-Bank/public/accountsJS/edit/' + id, {}).then(function (response) {
     console.log('getting edit info');
     console.log(response.data);
     var data = response.data;
     var contentJSONDOM = document.querySelector('#contentJSON');
 
     if (contentJSONDOM) {
-      contentJSONDOM.innerHTML = "\n                <div class=\"card-header\">Edit Account</div>\n\n                <div class=\"card-body\"> \n\n                    <div class=\"form-group\">\n                        <label> Account </label>\n                        <input type=\"text\" name=\"account\" value=\"".concat(data.account, "\" class=\"form-control\" readonly>\n                        <small class=\"form-text text-muted\">Account Name</small>\n                    </div>\n\n                    <div class=\"form-group\">\n                        <label>Personal Code</label>\n                        <input type=\"text\" name=\"personal_code\" value=\"").concat(data.personal_code, "\" class=\"form-control\" readonly>\n                        <small class=\"form-text text-muted\">Person's ID</small>\n                    </div>\n\n                    <div class=\"form-group\">\n                        <label>Name</label>\n                        <input type=\"text\" id=\"editName\" name=\"name\" value=\"").concat(data.name, "\" class=\"form-control\">\n                        <small class=\"form-text text-muted\">Person's Name</small>\n                    </div>\n\n                    <div class=\"form-group\">\n                        <label>Surname</label>\n                        <input type=\"text\" id=\"editSurname\" name=\"surname\" value=\"").concat(data.surname, "\" class=\"form-control\">\n                        <small class=\"form-text text-muted\">Person's Surname</small>\n                    </div>\n\n                    <button id=\"editButton\" type=\"submit\" onclick=\"\">EDIT</button>\n\n                </div>\n            ");
+      contentJSONDOM.innerHTML = "\n                <div class=\"card-header\">Edit Account</div>\n\n                <div class=\"card-body\"> \n\n                    <div class=\"form-group\">\n                        <label> Account </label>\n                        <input type=\"text\" name=\"account\" value=\"".concat(data.account, "\" class=\"form-control\" readonly>\n                        <small class=\"form-text text-muted\">Account Name</small>\n                    </div>\n\n                    <div class=\"form-group\">\n                        <label>Personal Code</label>\n                        <input type=\"text\" name=\"personal_code\" value=\"").concat(data.personal_code, "\" class=\"form-control\" readonly>\n                        <small class=\"form-text text-muted\">Person's ID</small>\n                    </div>\n\n                    <div class=\"form-group\">\n                        <label>Name</label>\n                        <input type=\"text\" id=\"editName\" name=\"name\" value=\"").concat(data.name, "\" class=\"form-control\">\n                        <small class=\"form-text text-muted\">Person's Name</small>\n                    </div>\n\n                    <div class=\"form-group\">\n                        <label>Surname</label>\n                        <input type=\"text\" id=\"editSurname\" name=\"surname\" value=\"").concat(data.surname, "\" class=\"form-control\">\n                        <small class=\"form-text text-muted\">Person's Surname</small>\n                    </div>\n\n                    <button id=\"editButton\" type=\"submit\" onclick=\"\"> EDIT </button>\n\n                </div>\n            ");
       var editButton = document.querySelector('#editButton');
 
       if (editButton) {

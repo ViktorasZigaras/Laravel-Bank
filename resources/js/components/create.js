@@ -3,7 +3,7 @@ import { drawIndexInit } from './index';
 
 export const drawCreateInit = () => {
     
-    axios.get('http://localhost/Laravel-Bank/public/accountsJS/edit/' + id).then( (response) => {  
+    axios.post('http://localhost/Laravel-Bank/public/accountsJS/create', {}).then( (response) => {  
         console.log('getting edit info');
 
         console.log(response.data);
@@ -20,82 +20,56 @@ export const drawCreateInit = () => {
 
                     <div class="form-group">
                         <label> Account </label>
-                        <input type="text" name="account" value="${data.account}" class="form-control" readonly>
+                        <input type="text" id="createAccount" name="account" value="${data.newAccount}" class="form-control">
                         <small class="form-text text-muted">Account Name</small>
                     </div>
 
                     <div class="form-group">
                         <label>Personal Code</label>
-                        <input type="text" name="personal_code" value="${data.personal_code}" class="form-control" readonly>
+                        <input type="text" id="createPersonID" name="personal_code" value="${data.newPersonID}" class="form-control">
                         <small class="form-text text-muted">Person's ID</small>
                     </div>
 
                     <div class="form-group">
                         <label>Name</label>
-                        <input type="text" id="editName" name="name" value="${data.name}" class="form-control">
+                        <input type="text" id="createName" name="name" value="${data.newName}" class="form-control">
                         <small class="form-text text-muted">Person's Name</small>
                     </div>
 
                     <div class="form-group">
                         <label>Surname</label>
-                        <input type="text" id="editSurname" name="surname" value="${data.surname}" class="form-control">
+                        <input type="text" id="createSurname" name="surname" value="${data.newSurname}" class="form-control">
                         <small class="form-text text-muted">Person's Surname</small>
                     </div>
 
-                    <button id="editButton" type="submit" onclick="">EDIT</button>
+                    <button id="createButton" type="submit" onclick=""> ADD </button>
 
                 </div>
             `;
 
-            // <input type="hidden" name="uuid" value="{{$newUuid}}">
+            //  
 
-            // <div class="form-group">
-            //     <label>Account</label>
-            //     <input type="text" name="account" value="{{old('account', $newAccount)}}" class="form-control">
-            //     <small class="form-text text-muted">Account Name</small>
-            // </div>
-
-            // <div class="form-group">
-            //     <label>Personal Code</label>
-            //     <input type="text" name="personal_code" value="{{old('personal_code', $newPersonID)}}" class="form-control">
-            //     <small class="form-text text-muted">Person's ID</small>
-            // </div>
-
-            // <div class="form-group">
-            //     <label>Name</label>
-            //     <input type="text" name="name" value="{{old('name', $newName)}}" class="form-control">
-            //     <small class="form-text text-muted">Person's Name</small>
-            // </div>
-
-            // <div class="form-group">
-            //     <label>Surname</label>
-            //     <input type="text" name="surname" value="{{old('surname', $newSurname)}}" class="form-control">
-            //     <small class="form-text text-muted">Person's Surname</small>
-            // </div>
-
-            // <input type="hidden" name="value" value="{{$newValue}}">
-
-            // @csrf
-            // <button type="submit">ADD</button>
-
-            const editButton = document.querySelector('#editButton');
-            if (editButton) {
-                editButton.addEventListener("click", () => { 
-                    console.log('update');
-                    console.log(document.querySelector('#editName').value);
-                    console.log(document.querySelector('#editSurname').value);
-                    axios.post('http://localhost/Laravel-Bank/public/accountsJS/update/' + data.id, 
+            const createButton = document.querySelector('#createButton');
+            if (createButton) {
+                createButton.addEventListener("click", () => { 
+                    console.log('create');
+                    // console.log(data.newUuid, data.newValue);
+                    axios.post('http://localhost/Laravel-Bank/public/accountsJS/store', 
                     {
-                        name: document.querySelector('#editName').value,
-                        surname: document.querySelector('#editSurname').value,
+                        uuid: data.newUuid,
+                        account: document.querySelector('#createAccount').value,
+                        personal_code: document.querySelector('#createPersonID').value,
+                        name: document.querySelector('#createName').value,
+                        surname: document.querySelector('#createSurname').value,
+                        value: data.newValue,
                     }).then( (response) => {  
                         console.log(response);
                         drawIndexInit();
                     })
                     .catch( (error) => {
                         console.log(error);
-                        console.log(error.response);
-                        console.log(error.response.data);
+                        // console.log(error.response);
+                        // console.log(error.response.data);
                     } );
                 });
             }

@@ -34,9 +34,9 @@ Route::group(['prefix' => 'accounts'], function() {
 Route::group(['prefix' => 'accountsJS'], function() {
     Route::get ('',                 'AccountController@indexJS');
     Route::post('',                 'AccountController@indexJSdata');
-    // Route::get ('create',           'AccountController@createJS')  ->name('account.create');
-    // Route::post('store',            'AccountController@storeJS')   ->name('account.store');
-    Route::get ('edit/{account}',   'AccountController@editJS');
+    Route::post('create',           'AccountController@createJS');
+    Route::post('store',            'AccountController@storeJS');
+    Route::post('edit/{account}',   'AccountController@editJS');
     Route::post('update/{account}', 'AccountController@updateJS');
     Route::post('delete/{account}', 'AccountController@destroyJS');
     Route::post('add/{account}',    'AccountController@addJS');

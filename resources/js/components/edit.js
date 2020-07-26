@@ -3,7 +3,7 @@ import { drawIndexInit } from './index';
 
 export const drawEditInit = (id) => {
     
-    axios.get('http://localhost/Laravel-Bank/public/accountsJS/edit/' + id).then( (response) => {  
+    axios.post('http://localhost/Laravel-Bank/public/accountsJS/edit/' + id, {}).then( (response) => {  
         console.log('getting edit info');
 
         console.log(response.data);
@@ -42,7 +42,7 @@ export const drawEditInit = (id) => {
                         <small class="form-text text-muted">Person's Surname</small>
                     </div>
 
-                    <button id="editButton" type="submit" onclick="">EDIT</button>
+                    <button id="editButton" type="submit" onclick=""> EDIT </button>
 
                 </div>
             `;
