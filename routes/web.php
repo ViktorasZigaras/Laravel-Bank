@@ -26,7 +26,7 @@ Route::group(['prefix' => 'accounts'], function() {
     Route::get ('edit/{account}',   'AccountController@edit')    ->name('account.edit');
     Route::post('update/{account}', 'AccountController@update')  ->name('account.update');
     Route::post('delete/{account}', 'AccountController@destroy') ->name('account.destroy');
-    Route::get ('show/{account}',   'AccountController@show')    ->name('account.show');
+    // Route::get ('show/{account}',   'AccountController@show')    ->name('account.show');
     Route::post('add/{account}',    'AccountController@add')     ->name('account.add');
     Route::post('remove/{account}', 'AccountController@remove')  ->name('account.remove');
 });
@@ -36,10 +36,9 @@ Route::group(['prefix' => 'accountsJS'], function() {
     Route::post('',                 'AccountController@indexJSdata');
     // Route::get ('create',           'AccountController@createJS')  ->name('account.create');
     // Route::post('store',            'AccountController@storeJS')   ->name('account.store');
-    // Route::get ('edit/{account}',   'AccountController@editJS')    ->name('account.edit');
-    // Route::post('update/{account}', 'AccountController@updateJS')  ->name('account.update');
-    // Route::post('delete/{account}', 'AccountController@destroyJS') ->name('account.destroy');
-    // Route::get ('show/{account}',   'AccountController@showJS')    ->name('account.show');
-    // Route::post('add/{account}',    'AccountController@addJS')     ->name('account.add');
-    // Route::post('remove/{account}', 'AccountController@removeJS')  ->name('account.remove');
+    Route::get ('edit/{account}',   'AccountController@editJS');
+    Route::post('update/{account}', 'AccountController@updateJS');
+    Route::post('delete/{account}', 'AccountController@destroyJS');
+    Route::post('add/{account}',    'AccountController@addJS');
+    Route::post('remove/{account}', 'AccountController@removeJS');
 });

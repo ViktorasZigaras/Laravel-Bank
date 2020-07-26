@@ -14,7 +14,8 @@ class ValueRequest extends FormRequest
     public function rules()
     {
         return [
-            'value' => 'required',
+            'value' => 'required|min:0',
+            // |gte:value
         ];
     }
 }

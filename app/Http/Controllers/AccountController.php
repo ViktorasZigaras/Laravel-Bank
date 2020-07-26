@@ -21,33 +21,39 @@ class AccountController extends Controller
         # is needed for demanding to be logged in
         $this->middleware('auth');
     }
-    
-    public function index()
+
+    public function indexData()
     {
         # it is possible that there will be no entries, but that's for later
-        $currency = Currency::all()->first();
+        $currency = Currency::find(1);
         $time = time();
         if ($time - strtotime($currency->updated_at) > 3600) {
             $call = curl_init(); 
             curl_setopt($call, CURLOPT_URL, 'https://api.exchangeratesapi.io/latest?symbols=USD');
             curl_setopt($call, CURLOPT_RETURNTRANSFER, 1); 
-            $output = json_decode(curl_exec($call)); 
+            $json = json_decode(curl_exec($call)); 
             curl_close($call);
-            $currency->rate = $output->rates->USD;
+            $currency->rate = $json->rates->USD;
             $currency->updated_at = date($time);
             $currency->save();
         }
         $accounts = Account::all()->sortBy('surname');
         $rate = $currency->rate;
-        $role = User::find(Auth::id())->role ?? 'none';
+        $role = User::find(Auth::id())->role ?? User::ROLE_NONE;
+
+        return compact('accounts', 'rate', 'role');
+    }
+    
+    public function index()
+    {
         #
-        return view('account.index', compact('accounts', 'rate', 'role'));
+        return view('account.index', $this->indexData());
     }
 
     public function add(ValueRequest $request, Account $account)
     {
         #
-        if ($request->value < 0) return redirect()->back()->withErrors('Negative value can\'t be provided.');
+        // if ($request->value < 0) return redirect()->back()->withErrors('Negative value can\'t be provided.');
         $account->value += $request->value;
         $account->save();
         return redirect()->back()->with('success_message', 'Amount ' . $request->value . ' added.');
@@ -56,41 +62,33 @@ class AccountController extends Controller
     public function remove(ValueRequest $request, Account $account)
     {
         #
-        if ($request->value < 0) return redirect()->back()->withErrors('Negative value can\'t be provided.');
+        // if ($request->value < 0) return redirect()->back()->withErrors('Negative value can\'t be provided.');
+        # remove later
         if ($request->value > $account->value) return redirect()->back()->withErrors('Can\'t remove more than account has.');
         $account->value -= $request->value;
         $account->save();
         return redirect()->back()->with('success_message', 'Amount ' . $request->value . ' removed.');
     }
 
-    private $numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-
-    private function generatePersonID() {
-        $person_id = '';
-        for ($i = 0; $i < 11; $i++) { 
-            $person_id .= $this->numbers[rand(0, count($this->numbers) - 1)];
+    private function generateNumber(int $length = 0) {
+        $numbers = range(0, 9);
+        $number = '';
+        for ($i = 0; $i < $length; $i++) { 
+            $number .= $numbers[rand(0, count($numbers) - 1)];
         }
-        return $person_id;
-    }
-
-    private function generateAccountID() {
-        $account_id = 'LT';
-        for ($i = 0; $i < 20; $i++) { 
-            $account_id .= $this->numbers[rand(0, count($this->numbers) - 1)];
-        }
-        return $account_id;
+        return $number;
     }
 
     public function create()
     {
         #
         return view('account.create', [
-            'newUuid' => (string) Uuid::uuid4(),
-            'newName' => 'name ' . rand(1, 50),
-            'newSurname' => 'surname ' . rand(1, 50),
-            'newAccount' => $this->generateAccountID(),
-            'newPersonID' => $this->generatePersonID(),
-            'newValue' => 0
+            'newUuid'     => (string) Uuid::uuid4(),
+            'newName'     => (string) 'name ' . rand(1, 50),
+            'newSurname'  => (string) 'surname ' . rand(1, 50),
+            'newAccount'  => (int)    $this->generateNumber(11),
+            'newPersonID' => (int)    'LT' . $this->generateNumber(20),
+            'newValue'    => (int)    0,
         ]);
     }
 
@@ -105,6 +103,7 @@ class AccountController extends Controller
     {
         # unused in this project
         // $a = Book::where('name', 'ona')->first();
+        // $account = Account::find($id);
         // return view show
     }
 
@@ -117,19 +116,18 @@ class AccountController extends Controller
     public function update(UpdateRequest $request, Account $account)
     {
         #
-        $account->fill($request->all());
+        $account->fill($request->all())->save();
         return redirect()->route('account.index')->with('success_message', 'Account updated.');
     }
 
     public function destroy(Account $account)
     {
         #
-        if ($account->value !== 0) {
+        if (!$account->canDelete()) {
             return redirect()->back()->withErrors('Account has to be empty.');
-        } else {
-            $account->delete();
-            return redirect()->back()->with('success_message', 'Account deleted.');
         }
+        $account->delete();
+        return redirect()->back()->with('success_message', 'Account deleted.');
     }
 
     ###
@@ -139,25 +137,55 @@ class AccountController extends Controller
         return view('layouts.appJS');
     }
 
+    public function editJS(Account $account)
+    {
+        #
+        return $account;
+    }
+
     public function indexJSdata()
     {
-        # it is possible that there will be no entries, but that's for later
-        $currency = Currency::all()->first();
-        $time = time();
-        if ($time - strtotime($currency->updated_at) > 3600) {
-            $call = curl_init(); 
-            curl_setopt($call, CURLOPT_URL, 'https://api.exchangeratesapi.io/latest?symbols=USD');
-            curl_setopt($call, CURLOPT_RETURNTRANSFER, 1); 
-            $output = json_decode(curl_exec($call)); 
-            curl_close($call);
-            $currency->rate = $output->rates->USD;
-            $currency->updated_at = date($time);
-            $currency->save();
-        }
-        $accounts = Account::all()->sortBy('surname');
-        $rate = $currency->rate;
-        $role = User::find(Auth::id())->role ?? 'none';
         #
-        return json_encode(compact('accounts', 'rate', 'role'));
+        return $this->indexData();
+    }
+
+    public function updateJS(UpdateRequest $request, Account $account)
+    {
+        #
+        $account->fill($request->all())->save();
+        // return redirect()->route('account.index')->with('success_message', 'Account updated.');
+        return 'updated';
+    }
+
+    public function destroyJS(Account $account)
+    {
+        #
+        if (!$account->canDelete()) {
+            return 'can\'t delete';
+            // return redirect()->back()->withErrors('Account has to be empty.');
+        }
+        $account->delete();
+        // return redirect()->back()->with('success_message', 'Account deleted.');
+        return 'deleted';
+    }
+
+    public function addJS(ValueRequest $request, Account $account)
+    {
+        #
+        # test why negatives does not work
+        $account->value += $request->value;
+        $account->save();
+        return 'Amount ' . $request->value . ' added.';
+    }
+
+    public function removeJS(ValueRequest $request, Account $account)
+    {
+        #
+        # test why negatives does not work
+        # remove later
+        if ($request->value > $account->value) return 'Can\'t remove more than account has.';
+        $account->value -= $request->value;
+        $account->save();
+        return 'Amount ' . $request->value . ' removed.';
     }
 }

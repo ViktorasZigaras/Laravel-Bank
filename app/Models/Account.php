@@ -8,5 +8,9 @@ class Account extends Model
 {
     protected $fillable = ['uuid', 'account', 'personal_code', 'name', 'surname', 'value'];
 
+    public function canDelete() {
+        return $this->value === 0;
+    } 
+
     # possible defaults
 }
