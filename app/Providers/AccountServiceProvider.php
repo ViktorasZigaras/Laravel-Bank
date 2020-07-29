@@ -9,6 +9,7 @@ class AccountServiceProvider extends ServiceProvider
 {
     public function register()
     {
+        # make dependecy tree here
         $this->app->singleton(AccountService::class, function($app) {
             // $account = new AccountService();
             // $account->request = $this->app->request;
@@ -16,7 +17,7 @@ class AccountServiceProvider extends ServiceProvider
         });
     }
 
-    public function boot()
+    public function boot() # inject response
     {
         //
     }

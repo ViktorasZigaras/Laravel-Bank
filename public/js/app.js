@@ -37274,11 +37274,6 @@ module.exports = function(module) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 __webpack_require__(/*! ./appJS.js */ "./resources/js/appJS.js");
@@ -37398,46 +37393,10 @@ var drawAppInit = function drawAppInit() {
   var contentJSDOM = document.querySelector('#contentJS');
 
   if (contentJSDOM) {
-    contentJSDOM.innerHTML += "\n            <div class=\"container\">\n\n                <div class=\"row justify-content-center\">\n\n                    <div class=\"col-md-10\">\n\n                        <div class=\"card min-width-1000\">\n\n                            <div class=\"header\">\n\n                                <div><img class=\"image\" src=\"pictures/bank.jpg\" alt=\"bank\"></div>\n\n                                <div class=\"header-text\">\n                                    <h2> \u010Ciup\u010Dius and Grieb\u010Dius Inc. </h2>\n                                    <div> Give Us All Of Your Money NOW!!! </div>\n                                </div>\n\n                                <div><img class=\"image\" src=\"pictures/money.jpg\" alt=\"money\"></div>\n\n                            </div>\n\n                            <div id=\"contentJSON\"></div>\n\n                            <div class=\"footer\">\n                                <div> Grab-All Brothers: We Love Your Money And NOT You!!! </div>\n                                <div> &copy; 2020 Corona Edition </div>\n                            </div>\n\n                        </div>\n\n                    </div>\n\n                </div>\n\n            </div>\n        ";
+    contentJSDOM.innerHTML += "\n            <div id=\"errors\"></div>\n            <div id=\"messages\"></div>\n\n            <div class=\"container\">\n\n                <div class=\"row justify-content-center\">\n\n                    <div class=\"col-md-10\">\n\n                        <div class=\"card min-width-1000\">\n\n                            <div class=\"header\">\n\n                                <div><img class=\"image\" src=\"pictures/bank.jpg\" alt=\"bank\"></div>\n\n                                <div class=\"header-text\">\n                                    <h2> \u010Ciup\u010Dius and Grieb\u010Dius Inc. </h2>\n                                    <div> Give Us All Of Your Money NOW!!! </div>\n                                </div>\n\n                                <div><img class=\"image\" src=\"pictures/money.jpg\" alt=\"money\"></div>\n\n                            </div>\n\n                            <div id=\"contentJSON\"></div>\n\n                            <div class=\"footer\">\n                                <div> Grab-All Brothers: We Love Your Money And NOT You!!! </div>\n                                <div> &copy; 2020 Corona Edition </div>\n                            </div>\n\n                        </div>\n\n                    </div>\n\n                </div>\n\n            </div>\n        ";
     Object(_index__WEBPACK_IMPORTED_MODULE_0__["drawIndexInit"])();
   }
 };
-/*
-
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-9">
-            @if ($errors->any())
-            <div class="alert">
-                <ul class="list-group">
-                    @foreach ($errors->all() as $error)
-                        <li class="list-group-item list-group-item-danger">{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-            @endif
-        </div>
-    </div>
-</div>
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-9">
-            @if(session()->has('success_message'))
-                <div class="alert alert-success" role="alert">
-                    {{session()->get('success_message')}}
-                </div>
-            @endif
-            
-            @if(session()->has('info_message'))
-                <div class="alert alert-info" role="alert">
-                    {{session()->get('info_message')}}
-                </div>
-            @endif
-        </div>
-    </div>
-</div>
-
-*/
 
 /***/ }),
 
@@ -37452,6 +37411,8 @@ var drawAppInit = function drawAppInit() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawCreateInit", function() { return drawCreateInit; });
 /* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index */ "./resources/js/components/index.js");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./helpers */ "./resources/js/components/helpers.js");
+
 
 var drawCreateInit = function drawCreateInit() {
   axios.post('http://localhost/Laravel-Bank/public/accountsJS/create', {}).then(function (response) {
@@ -37480,8 +37441,9 @@ var drawCreateInit = function drawCreateInit() {
             console.log(response);
             Object(_index__WEBPACK_IMPORTED_MODULE_0__["drawIndexInit"])();
           })["catch"](function (error) {
-            console.log(error); // console.log(error.response);
-            // console.log(error.response.data);
+            console.log(error);
+            console.log(error.response.data.errors);
+            Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["displayErrorMessages"])(error.response.data.errors);
           });
         });
       }
@@ -37504,6 +37466,8 @@ var drawCreateInit = function drawCreateInit() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawEditInit", function() { return drawEditInit; });
 /* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index */ "./resources/js/components/index.js");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./helpers */ "./resources/js/components/helpers.js");
+
 
 var drawEditInit = function drawEditInit(id) {
   axios.post('http://localhost/Laravel-Bank/public/accountsJS/edit/' + id, {}).then(function (response) {
@@ -37519,8 +37483,6 @@ var drawEditInit = function drawEditInit(id) {
       if (editButton) {
         editButton.addEventListener("click", function () {
           console.log('update');
-          console.log(document.querySelector('#editName').value);
-          console.log(document.querySelector('#editSurname').value);
           axios.post('http://localhost/Laravel-Bank/public/accountsJS/update/' + data.id, {
             name: document.querySelector('#editName').value,
             surname: document.querySelector('#editSurname').value
@@ -37529,8 +37491,8 @@ var drawEditInit = function drawEditInit(id) {
             Object(_index__WEBPACK_IMPORTED_MODULE_0__["drawIndexInit"])();
           })["catch"](function (error) {
             console.log(error);
-            console.log(error.response);
-            console.log(error.response.data);
+            console.log(error.response.data.errors);
+            Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["displayErrorMessages"])(error.response.data.errors);
           });
         });
       }
@@ -37538,6 +37500,46 @@ var drawEditInit = function drawEditInit(id) {
   })["catch"](function (error) {
     console.log(error);
   });
+};
+
+/***/ }),
+
+/***/ "./resources/js/components/helpers.js":
+/*!********************************************!*\
+  !*** ./resources/js/components/helpers.js ***!
+  \********************************************/
+/*! exports provided: displayErrorMessages, displayMessages */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "displayErrorMessages", function() { return displayErrorMessages; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "displayMessages", function() { return displayMessages; });
+var displayErrorMessages = function displayErrorMessages(errors) {
+  console.log(errors);
+  var html = "\n        <div class=\"container\">\n            <div class=\"row justify-content-center\">\n                <div class=\"col-md-9\">\n                    <div class=\"alert\">\n                        <ul class=\"list-group\">\n    ";
+  Object.entries(errors).forEach(function (error) {
+    html += "\n            <li class=\"list-group-item list-group-item-danger\">||".concat(error[1], "}||</li>\n        ");
+  });
+  html += "\n                        </ul>\n                    </div>\n                </div>\n            </div>\n        </div>\n    ";
+  document.querySelector('#errors').innerHTML = html;
+};
+var displayMessages = function displayMessages(sucessMessage, infoMessage) {
+  var html = "\n        <div class=\"container\">\n            <div class=\"row justify-content-center\">\n                <div class=\"col-md-9\">\n                    <div class=\"alert\">    \n    ";
+
+  if (sucessMessage) {
+    html += "\n            <div class=\"alert alert-success\" role=\"alert\"> ".concat(sucessMessage, "</div>\n        ");
+  }
+
+  ;
+
+  if (infoMessage) {
+    html += "\n            <div class=\"alert alert-success\" role=\"alert\"> ".concat(infoMessage, "</div>\n        ");
+  }
+
+  ;
+  html += "\n                    </div>\n                </div>\n            </div>\n        </div>\n    ";
+  document.querySelector('#messages').innerHTML = html;
 };
 
 /***/ }),

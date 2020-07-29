@@ -1,5 +1,6 @@
 
 import { drawIndexInit } from './index';
+import { displayErrorMessages } from './helpers';
 
 export const drawCreateInit = () => {
     
@@ -68,8 +69,8 @@ export const drawCreateInit = () => {
                     })
                     .catch( (error) => {
                         console.log(error);
-                        // console.log(error.response);
-                        // console.log(error.response.data);
+                        console.log(error.response.data.errors);
+                        displayErrorMessages(error.response.data.errors);
                     } );
                 });
             }

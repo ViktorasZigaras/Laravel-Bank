@@ -1,5 +1,6 @@
 
 import { drawIndexInit } from './index';
+import { displayErrorMessages } from './helpers';
 
 export const drawEditInit = (id) => {
     
@@ -51,8 +52,6 @@ export const drawEditInit = (id) => {
             if (editButton) {
                 editButton.addEventListener("click", () => { 
                     console.log('update');
-                    console.log(document.querySelector('#editName').value);
-                    console.log(document.querySelector('#editSurname').value);
                     axios.post('http://localhost/Laravel-Bank/public/accountsJS/update/' + data.id, 
                     {
                         name: document.querySelector('#editName').value,
@@ -61,11 +60,11 @@ export const drawEditInit = (id) => {
                         console.log(response);
                         drawIndexInit();
                     })
-                    .catch( (error) => {
+                    .catch((error) => {
                         console.log(error);
-                        console.log(error.response);
-                        console.log(error.response.data);
-                    } );
+                        console.log(error.response.data.errors);
+                        displayErrorMessages(error.response.data.errors);
+                    });
                 });
             }
            

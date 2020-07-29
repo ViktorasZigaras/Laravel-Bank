@@ -63,8 +63,8 @@ class AccountService
             'newUuid'     => (string) Uuid::uuid4(),
             'newName'     => (string) 'name ' . rand(1, 50),
             'newSurname'  => (string) 'surname ' . rand(1, 50),
-            'newAccount'  => (string)    'LT' . $this->generateNumber(20),
-            'newPersonID' => (int) $this->generateNumber(11),
+            'newAccount'  => (string) 'LT' . $this->generateNumber(20),
+            'newPersonID' => (int)    $this->generateNumber(11),
             'newValue'    => (int)    0,
         ];
     }

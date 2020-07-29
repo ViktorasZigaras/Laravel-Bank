@@ -25,4 +25,11 @@ class StoreRequest extends FormRequest
             'value'         => 'required',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'name.min' => 'default test',
+        ];
+    }
 }
