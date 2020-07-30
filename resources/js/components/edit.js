@@ -1,6 +1,6 @@
 
 import { drawIndexInit } from './index';
-import { displayErrorMessages } from './helpers';
+import { displayMessages, displayErrorMessages } from './helpers';
 
 export const drawEditInit = (id) => {
     
@@ -58,11 +58,11 @@ export const drawEditInit = (id) => {
                         surname: document.querySelector('#editSurname').value,
                     }).then( (response) => {  
                         console.log(response);
+                        displayMessages(response.data);
                         drawIndexInit();
                     })
                     .catch((error) => {
                         console.log(error);
-                        console.log(error.response.data.errors);
                         displayErrorMessages(error.response.data.errors);
                     });
                 });

@@ -10,7 +10,7 @@ export const displayErrorMessages = (errors) => {
     `;
     Object.entries(errors).forEach( (error) => {
         html += `
-            <li class="list-group-item list-group-item-danger">||${ error[1] }}||</li>
+            <li class="list-group-item list-group-item-danger">${ error[1] }</li>
         `;
     });
     html += `

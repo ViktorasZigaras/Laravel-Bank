@@ -37428,8 +37428,7 @@ var drawCreateInit = function drawCreateInit() {
 
       if (createButton) {
         createButton.addEventListener("click", function () {
-          console.log('create'); // console.log(data.newUuid, data.newValue);
-
+          console.log('create');
           axios.post('http://localhost/Laravel-Bank/public/accountsJS/store', {
             uuid: data.newUuid,
             account: document.querySelector('#createAccount').value,
@@ -37439,10 +37438,9 @@ var drawCreateInit = function drawCreateInit() {
             value: data.newValue
           }).then(function (response) {
             console.log(response);
+            Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["displayMessages"])(response.data);
             Object(_index__WEBPACK_IMPORTED_MODULE_0__["drawIndexInit"])();
           })["catch"](function (error) {
-            console.log(error);
-            console.log(error.response.data.errors);
             Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["displayErrorMessages"])(error.response.data.errors);
           });
         });
@@ -37488,10 +37486,10 @@ var drawEditInit = function drawEditInit(id) {
             surname: document.querySelector('#editSurname').value
           }).then(function (response) {
             console.log(response);
+            Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["displayMessages"])(response.data);
             Object(_index__WEBPACK_IMPORTED_MODULE_0__["drawIndexInit"])();
           })["catch"](function (error) {
             console.log(error);
-            console.log(error.response.data.errors);
             Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["displayErrorMessages"])(error.response.data.errors);
           });
         });
@@ -37519,7 +37517,7 @@ var displayErrorMessages = function displayErrorMessages(errors) {
   console.log(errors);
   var html = "\n        <div class=\"container\">\n            <div class=\"row justify-content-center\">\n                <div class=\"col-md-9\">\n                    <div class=\"alert\">\n                        <ul class=\"list-group\">\n    ";
   Object.entries(errors).forEach(function (error) {
-    html += "\n            <li class=\"list-group-item list-group-item-danger\">||".concat(error[1], "}||</li>\n        ");
+    html += "\n            <li class=\"list-group-item list-group-item-danger\">".concat(error[1], "</li>\n        ");
   });
   html += "\n                        </ul>\n                    </div>\n                </div>\n            </div>\n        </div>\n    ";
   document.querySelector('#errors').innerHTML = html;
@@ -37555,6 +37553,8 @@ var displayMessages = function displayMessages(sucessMessage, infoMessage) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawIndexInit", function() { return drawIndexInit; });
 /* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./edit */ "./resources/js/components/edit.js");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./helpers */ "./resources/js/components/helpers.js");
+
 
 var drawIndexInit = function drawIndexInit() {
   axios.post('http://localhost/Laravel-Bank/public/accountsJS', {}).then(function (response) {
@@ -37593,9 +37593,10 @@ var drawIndexInit = function drawIndexInit() {
             console.log('delete');
             axios.post('http://localhost/Laravel-Bank/public/accountsJS/delete/' + account.id, {}).then(function (response) {
               console.log(response);
+              Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["displayMessages"])(response.data);
               drawIndexInit();
             })["catch"](function (error) {
-              console.log(error); // console.log(error.response);
+              console.log(error);
             });
           });
         }
@@ -37609,9 +37610,10 @@ var drawIndexInit = function drawIndexInit() {
               value: document.querySelector('#value' + account.id).value
             }).then(function (response) {
               console.log(response);
+              Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["displayMessages"])(response.data);
               drawIndexInit();
             })["catch"](function (error) {
-              console.log(error); // console.log(error.response);
+              console.log(error);
             });
           });
         }
@@ -37625,9 +37627,10 @@ var drawIndexInit = function drawIndexInit() {
               value: document.querySelector('#value' + account.id).value
             }).then(function (response) {
               console.log(response);
+              Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["displayMessages"])(response.data);
               drawIndexInit();
             })["catch"](function (error) {
-              console.log(error); // console.log(error.response);
+              console.log(error);
             });
           });
         }

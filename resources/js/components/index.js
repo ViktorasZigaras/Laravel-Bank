@@ -1,5 +1,6 @@
 
 import { drawEditInit } from './edit';
+import { displayMessages } from './helpers';
 
 export const drawIndexInit = () => {
 
@@ -77,11 +78,11 @@ export const drawIndexInit = () => {
                         console.log('delete');
                         axios.post('http://localhost/Laravel-Bank/public/accountsJS/delete/' + account.id, {}).then( (response) => {  
                             console.log(response);
+                            displayMessages(response.data);
                             drawIndexInit();
                         })
                         .catch( (error) => {
                             console.log(error);
-                            // console.log(error.response);
                         });
                     });
                 }
@@ -94,11 +95,11 @@ export const drawIndexInit = () => {
                             value: document.querySelector('#value' + account.id).value,
                         }).then( (response) => {  
                             console.log(response);
+                            displayMessages(response.data);
                             drawIndexInit();
                         })
                         .catch( (error) => {
                             console.log(error);
-                            // console.log(error.response);
                         });
                     });
                 }
@@ -111,11 +112,11 @@ export const drawIndexInit = () => {
                             value: document.querySelector('#value' + account.id).value,
                         }).then( (response) => {  
                             console.log(response);
+                            displayMessages(response.data);
                             drawIndexInit();
                         })
                         .catch( (error) => {
                             console.log(error);
-                            // console.log(error.response);
                         });
                     });
                 }

@@ -98,7 +98,7 @@ class AccountController extends Controller
     public function updateJS(UpdateRequest $request, Account $account)
     {
         $account->fill($request->all())->save();
-        return 'updated';
+        return 'Account updated.';
     }
 
     public function destroyJS(Account $account)
@@ -107,7 +107,7 @@ class AccountController extends Controller
             return 'can\'t delete';
         }
         $account->delete();
-        return 'deleted';
+        return 'Account deleted.';
     }
 
     public function addJS(AccountService $accountService, ValueRequest $request, Account $account)
@@ -122,7 +122,7 @@ class AccountController extends Controller
         return 'Amount ' . $request->value . ' removed.';
     }
 
-    public function createJS()
+    public function createJS(AccountService $accountService)
     {
         return $accountService->generateNewAccount();
     }

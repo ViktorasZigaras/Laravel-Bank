@@ -1,6 +1,6 @@
 
 import { drawIndexInit } from './index';
-import { displayErrorMessages } from './helpers';
+import { displayMessages, displayErrorMessages } from './helpers';
 
 export const drawCreateInit = () => {
     
@@ -54,7 +54,6 @@ export const drawCreateInit = () => {
             if (createButton) {
                 createButton.addEventListener("click", () => { 
                     console.log('create');
-                    // console.log(data.newUuid, data.newValue);
                     axios.post('http://localhost/Laravel-Bank/public/accountsJS/store', 
                     {
                         uuid: data.newUuid,
@@ -65,13 +64,12 @@ export const drawCreateInit = () => {
                         value: data.newValue,
                     }).then( (response) => {  
                         console.log(response);
+                        displayMessages(response.data);
                         drawIndexInit();
                     })
                     .catch( (error) => {
-                        console.log(error);
-                        console.log(error.response.data.errors);
                         displayErrorMessages(error.response.data.errors);
-                    } );
+                    });
                 });
             }
            
