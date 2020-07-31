@@ -35,15 +35,13 @@ class AccountService
 
     public function add(Account $account, ValueRequest $request)
     {
-        // if ($request->value < 0) return redirect()->back()->withErrors('Negative value can\'t be provided.');
         $account->value += $request->value;
         $account->save();
     }
 
     public function remove(Account $account, ValueRequest $request)
     {
-        // if ($request->value < 0) return redirect()->back()->withErrors('Negative value can\'t be provided.');
-        # remove later
+        # |gte:value - ??? stops from updating but does not return error
         if ($request->value > $account->value) return redirect()->back()->withErrors('Can\'t remove more than account has.');
         $account->value -= $request->value;
         $account->save();

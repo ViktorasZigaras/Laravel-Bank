@@ -11,8 +11,6 @@ class AccountServiceProvider extends ServiceProvider
     {
         # make dependecy tree here
         $this->app->singleton(AccountService::class, function($app) {
-            // $account = new AccountService();
-            // $account->request = $this->app->request;
             return new AccountService();
         });
     }

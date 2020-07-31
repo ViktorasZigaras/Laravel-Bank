@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Account;
 // use Illuminate\Http\Request; #?
-// use Validator; #?
 use App\Http\Requests\StoreRequest;
 use App\Http\Requests\ValueRequest;
 use App\Http\Requests\UpdateRequest;
@@ -104,10 +103,16 @@ class AccountController extends Controller
     public function destroyJS(Account $account)
     {
         if (!$account->canDelete()) {
-            return 'can\'t delete';
+            return [
+                'type' => 'fail',
+                'message' => 'Can\'t delete non empty account.'
+            ];
         }
         $account->delete();
-        return 'Account deleted.';
+        return [
+            'type' => 'success',
+            'message' => 'Account deleted.'
+        ];
     }
 
     public function addJS(AccountService $accountService, ValueRequest $request, Account $account)

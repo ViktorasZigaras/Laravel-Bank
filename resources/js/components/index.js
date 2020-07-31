@@ -1,26 +1,17 @@
-
 import { drawEditInit } from './edit';
-import { displayMessages } from './helpers';
+import { displayMessages, displayErrorMessages } from './helpers';
 
 export const drawIndexInit = () => {
-
     axios.post('http://localhost/Laravel-Bank/public/accountsJS', {}).then( (response) => {  
         console.log('getting index info');
-
         console.log(response.data);
-
         const data = response.data;
-
         const contentJSONDOM = document.querySelector('#contentJSON');
         if (contentJSONDOM) {
-
             let accounts = '';
             let editButton, deleteButton, addButton, removeButton;
-
             Object.entries(data.accounts).forEach( account => {
-
                 account = account['1'];
-
                 accounts += `
                     <span>
                         ${account.account} 
@@ -33,37 +24,25 @@ export const drawIndexInit = () => {
                         &dollar;
                     </span>
                 `;
-
                 if (data.role === 'admin') {
                     accounts += `
                         <div class="flex">
-
                             <button id="editButton${account.id}" type="submit"> EDIT </button>
-
                             <button id="addButton${account.id}" type="submit"> ADD </button>
-
                             <button id="removeButton${account.id}" type="submit"> REMOVE </button>
-
                             <input id="value${account.id}" type="text" name="value" value="0" class="list-input">
-
                             <button id="deleteButton${account.id}" type="submit"> DELETE </button>
-
                         </div>
                     `;
                 }
-
             });
-
             contentJSONDOM.innerHTML = `
                 <div class="card-header"> Account List </div>
-
                 <div class="card-body"> ${accounts} </div>
             `;
-
             Object.entries(data.accounts).forEach( account => {
-
                 account = account['1'];
-
+                
                 editButton = document.querySelector('#editButton' + account.id);
                 if (editButton) {
                     editButton.addEventListener("click", () => { 
@@ -76,14 +55,17 @@ export const drawIndexInit = () => {
                 if (deleteButton) {
                     deleteButton.addEventListener("click", () => { 
                         console.log('delete');
-                        axios.post('http://localhost/Laravel-Bank/public/accountsJS/delete/' + account.id, {}).then( (response) => {  
+                        axios.post('http://localhost/Laravel-Bank/public/accountsJS/delete/' + account.id, {})
+                        .then((response) => {  
                             console.log(response);
-                            displayMessages(response.data);
+                            if (response.data.type === 'success') {
+                                displayMessages(response.data.message);
+                            } else if (response.data.type === 'fail') {
+                                displayErrorMessages(null, response.data.message);
+                            }
                             drawIndexInit();
                         })
-                        .catch( (error) => {
-                            console.log(error);
-                        });
+                        .catch((error) => {console.log(error);});
                     });
                 }
 
@@ -92,14 +74,16 @@ export const drawIndexInit = () => {
                     addButton.addEventListener("click", () => { 
                         console.log('add');
                         axios.post('http://localhost/Laravel-Bank/public/accountsJS/add/' + account.id, {
-                            value: document.querySelector('#value' + account.id).value,
-                        }).then( (response) => {  
+                            value: document.querySelector('#value' + account.id).value
+                        })
+                        .then((response) => {  
                             console.log(response);
                             displayMessages(response.data);
                             drawIndexInit();
                         })
-                        .catch( (error) => {
+                        .catch((error) => {
                             console.log(error);
+                            displayErrorMessages(error.response.data.errors);
                         });
                     });
                 }
@@ -109,23 +93,21 @@ export const drawIndexInit = () => {
                     removeButton.addEventListener("click", () => { 
                         console.log('remove');
                         axios.post('http://localhost/Laravel-Bank/public/accountsJS/remove/' + account.id, {
-                            value: document.querySelector('#value' + account.id).value,
-                        }).then( (response) => {  
+                            value: document.querySelector('#value' + account.id).value
+                        })
+                        .then( (response) => {  
                             console.log(response);
                             displayMessages(response.data);
                             drawIndexInit();
                         })
-                        .catch( (error) => {
+                        .catch((error) => {
                             console.log(error);
+                            displayErrorMessages(error.response.data.errors);
                         });
                     });
                 }
-
             });
-           
         }
-
     })
-    .catch( (error) => {console.log(error);} );
-
+    .catch((error) => {console.log(error);});
 }

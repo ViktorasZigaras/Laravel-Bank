@@ -14,8 +14,14 @@ class ValueRequest extends FormRequest
     public function rules()
     {
         return [
-            'value' => 'required|min:0',
-            // |gte:value
+            'value' => 'required|integer|min:0|gte:value',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'gte:value' => 'Value can\'t be greater than existing value.',
         ];
     }
 }
