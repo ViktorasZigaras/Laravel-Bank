@@ -37365,16 +37365,10 @@ var AppView = /*#__PURE__*/function () {
   function AppView() {
     _classCallCheck(this, AppView);
 
-    console.log('aaaa');
-    this.init();
+    this.drawAppInit();
   }
 
   _createClass(AppView, [{
-    key: "init",
-    value: function init() {
-      this.drawAppInit();
-    }
-  }, {
     key: "drawAppInit",
     value: function drawAppInit() {
       var listLink = document.querySelector('#listLink');
@@ -37654,7 +37648,13 @@ var drawIndexInit = function drawIndexInit() {
               value: document.querySelector('#value' + account.id).value
             }).then(function (response) {
               console.log(response);
-              Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["displayMessages"])(response.data);
+
+              if (response.data.type === 'success') {
+                Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["displayMessages"])(response.data.message);
+              } else if (response.data.type === 'fail') {
+                Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["displayErrorMessages"])(null, response.data.message);
+              }
+
               drawIndexInit();
             })["catch"](function (error) {
               console.log(error);

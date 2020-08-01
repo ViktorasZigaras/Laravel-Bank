@@ -4,15 +4,11 @@ import { drawCreateInit } from './create';
 export default class AppView {
 
     constructor() {
-        console.log('aaaa');
-        this.init();
-    }
-
-    init() {
         this.drawAppInit();
     }
 
     drawAppInit() {
+        
         const listLink = document.querySelector('#listLink');
         if (listLink) {
             listLink.addEventListener("click", () => { 

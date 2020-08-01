@@ -39,14 +39,6 @@ class AccountService
         $account->save();
     }
 
-    public function remove(Account $account, ValueRequest $request)
-    {
-        # |gte:value - ??? stops from updating but does not return error
-        if ($request->value > $account->value) return redirect()->back()->withErrors('Can\'t remove more than account has.');
-        $account->value -= $request->value;
-        $account->save();
-    }
-
     private function generateNumber(int $length = 0) {
         $numbers = range(0, 9);
         $number = '';

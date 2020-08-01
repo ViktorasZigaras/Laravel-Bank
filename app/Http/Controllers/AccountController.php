@@ -3,16 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Account;
-// use Illuminate\Http\Request; #?
+// use Illuminate\Http\Request; 
 use App\Http\Requests\StoreRequest;
 use App\Http\Requests\ValueRequest;
 use App\Http\Requests\UpdateRequest;
-
 use App\Services\AccountService;
 
 class AccountController extends Controller
 {
-
     public function __construct()
     {
         # is needed for demanding to be logged in
@@ -30,9 +28,11 @@ class AccountController extends Controller
         return redirect()->back()->with('success_message', 'Amount ' . $request->value . ' added.');
     }
 
-    public function remove(AccountService $accountService, ValueRequest $request, Account $account)
+    public function remove(ValueRequest $request, Account $account)
     {
-        $accountService->remove($account, $request);
+        if ($request->value > $account->value) return redirect()->back()->withErrors('Can\'t remove more than account has.');
+        $account->value -= $request->value;
+        $account->save();
         return redirect()->back()->with('success_message', 'Amount ' . $request->value . ' removed.');
     }
 
@@ -121,10 +121,20 @@ class AccountController extends Controller
         return 'Amount ' . $request->value . ' added.';
     }
 
-    public function removeJS(AccountService $accountService, ValueRequest $request, Account $account)
+    public function removeJS(ValueRequest $request, Account $account)
     {
-        $accountService->remove($account, $request);
-        return 'Amount ' . $request->value . ' removed.';
+        if ($request->value > $account->value) {
+            return [
+                'type' => 'fail',
+                'message' => 'Can\'t remove more than account has.'
+            ];
+        }
+        $account->value -= $request->value;
+        $account->save();
+        return [
+            'type' => 'success',
+            'message' => 'Amount ' . $request->value . ' removed.'
+        ];
     }
 
     public function createJS(AccountService $accountService)

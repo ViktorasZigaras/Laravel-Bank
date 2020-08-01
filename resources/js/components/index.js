@@ -97,7 +97,11 @@ export const drawIndexInit = () => {
                         })
                         .then( (response) => {  
                             console.log(response);
-                            displayMessages(response.data);
+                            if (response.data.type === 'success') {
+                                displayMessages(response.data.message);
+                            } else if (response.data.type === 'fail') {
+                                displayErrorMessages(null, response.data.message);
+                            }
                             drawIndexInit();
                         })
                         .catch((error) => {
